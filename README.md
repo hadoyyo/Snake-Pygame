@@ -1,3 +1,3 @@
 # Snake-Pygame
 
-Prosta gra tyou Snake.
+Prosta gra typu Snake.
