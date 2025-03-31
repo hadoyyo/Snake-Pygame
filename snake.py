@@ -3,6 +3,7 @@ from random import randint
 import sys
 pygame.init()
 window = pygame.display.set_mode((800,600)) # okienko
+pygame.display.set_caption("Snake")
 
 class Snake:
     def __init__(self):
@@ -25,7 +26,7 @@ class Snake:
         self.start_png = pygame.image.load("start_png.png")
         self.image = self.images["right"]  # początkowy obraz węża
         self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.width, self.height)
-        self.body = 0 # lista elementów składowych węża
+        self.body = 0 # lista elementów węża
 
     def tick(self, keys):
         if keys[pygame.K_UP] and self.direction != "down":
@@ -64,6 +65,10 @@ class Snake:
                     if self.hitbox.colliderect(self.cords_x[self.i-j*20],self.cords_y[self.i-j*20],2,2):
                         game_over()
         window.blit(self.image, (self.x_cord, self.y_cord))     
+        
+    def reset(self):
+        self.__init__()
+
 class Apple:
     def __init__(self):
         self.x_cord = randint(0,760)
@@ -76,28 +81,60 @@ class Apple:
         self.hitbox = pygame.Rect(self.x_cord,self.y_cord,self.width,self.height)
     def draw(self):
         window.blit(self.image,(self.x_cord,self.y_cord))
+
 def game_over():
+    global score, clock1, apple1, timer1, text, timer
+    
     skull = pygame.image.load('skull.png')
     background = pygame.image.load('back.png')
-    window.blit(background,(0,0))
-    window.blit(skull,(350,180))
-    window.blit(apple1,(315,355))
-    window.blit(timer1,(315,392))
-    window.blit(text,(330,350))
-    window.blit(timer,(330,387))
-    font = pygame.font.SysFont("arial", 60)
-    text2 = font.render("Koniec gry", True, (255, 0, 0))
-    text_rect = text2.get_rect(center=(400, 300))
-    start_ticks = pygame.time.get_ticks()
-    while pygame.time.get_ticks() - start_ticks < 4000:
-        window.blit(text2, text_rect)
+    
+    # obrazki
+    apple_img = pygame.image.load('apple1.png')
+    timer_img = pygame.image.load('timer.png')
+    font = pygame.font.SysFont("modern", 40)
+    score_text = font.render(f'Punkty: {score}', True, (0, 0, 0))
+    time_text = font.render(f'Czas: {round(clock1, 2):.2f}', True, (0, 0, 0))
+    
+    font_large = pygame.font.SysFont("arial", 60)
+    game_over_text = font_large.render("Koniec gry", True, (255, 0, 0))
+    options_text = font.render("R - Restart, Q - Wyjście", True, (0, 0, 0))
+    
+    waiting = True
+    while waiting:
+        window.blit(background, (0, 0))
+        window.blit(skull, (350, 180))
+        
+        # Wyświetlanie statystyk
+        window.blit(apple_img, (315, 355))
+        window.blit(timer_img, (315, 392))
+        window.blit(score_text, (330, 350))
+        window.blit(time_text, (330, 387))
+        
+        # Wyświetlanie tekstów
+        window.blit(game_over_text, (400 - game_over_text.get_width()//2, 260))
+        window.blit(options_text, (400 - options_text.get_width()//2, 424))
+        
         pygame.display.update()
-    sys.exit()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:  # restart gry
+                    waiting = False
+                    main()
+                    return
+                if event.key == pygame.K_q:  # wyjscie z gry
+                    pygame.quit()
+                    sys.exit()
+
 def main():
+    global clock1, text, timer, apple1, timer1, score
+    
     run = True #petla trwania gry
     player = Snake()
     clock = 0
-    global clock1,text,timer,apple1,timer1
     clock1 = 0
     score = 0
     apples = []
@@ -105,41 +142,57 @@ def main():
     apple1 = pygame.image.load('apple1.png')
     timer1 = pygame.image.load('timer.png')
     background = pygame.image.load('back.png')
+    
     while run:
         if player.x_cord < 0 or player.x_cord + player.width > 800 or player.y_cord < 0 or player.y_cord + player.height > 600:
             game_over()
+            
         clock += pygame.time.Clock().tick(200)/350
         if player.start == False:
             clock1 += pygame.time.Clock().tick(250)/300
+            
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: # wyjscie z okeinka
+            if event.type == pygame.QUIT: # wyjscie z okienka
                 run = False
+                
         keys = pygame.key.get_pressed()
         player.tick(keys)
+        
         for apple in apples:
             apple.tick()
+            
         for apple in apples:
             if player.hitbox.colliderect(apple.hitbox):
                 apples.remove(apple)
                 score +=1
                 apples.append(Apple())
                 player.body+=1
+                
         text = pygame.font.Font.render(pygame.font.SysFont("modern",40),'Punkty: '+ str(score),True,(0,0,0))
         timer = pygame.font.Font.render(pygame.font.SysFont("modern",40),'Czas: '+ str(f"{round(clock1, 2):.2f}"),True,(0,0,0))       
-        window.blit(background,(0,0)) #kolor tla (kolejnosc rysowania najpierw tlo, potem obiekty,postacie itd)
-        player.draw() #wyswietlanie 'snake' na ekranie
+        
+        window.blit(background,(0,0)) # kolor tla
+        player.draw() # wyswietlanie 'snake' na ekranie
+        
         for apple in apples:
             apple.draw()
+            
         window.blit(apple1,(2,3))
         window.blit(timer1,(2,31))
         window.blit(text,(17,0))
         window.blit(timer,(17,27))
+        
         if player.start == True:
             window.blit(background,(0,0))
             window.blit(player.start_png,(45,100))
+            
         player.cords_x.insert(player.i,player.x_cord)
         player.cords_y.insert(player.i,player.y_cord)
         player.i+=1
         pygame.display.update()
+        
+    pygame.quit()
+    sys.exit()
+
 if __name__ == "__main__":
     main()
