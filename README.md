@@ -1,6 +1,7 @@
 # Snake - Pygame Project
-
-![Snake](./ss/logo.png)
+<div align="center">
+  <img src="./ss/logo.jpg"/>
+</div>
 
 ## Table of Contents
 - 🚀 [Project Overview](#project-overview)
