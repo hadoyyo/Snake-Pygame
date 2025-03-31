@@ -30,3 +30,9 @@ Any system capable of running .exe files.
 2. Run the `snake.exe` file to start the game.
 
 ## Screenshots
+
+<div align="center">
+  <img src="./ss/ss1.png"/>
+  <img src="./ss/ss2.png"/>
+  <img src="./ss/ss3.png"/>
+</div>
