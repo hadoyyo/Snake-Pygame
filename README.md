@@ -1,6 +1,6 @@
 # Snake - Pygame Project
 <div align="center">
-  <img src="./ss/logo.jpg"/>
+  <img src="./ss/logo.png"/>
 </div>
 
 ## Table of Contents
