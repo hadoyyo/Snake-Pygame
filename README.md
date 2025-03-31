@@ -11,14 +11,14 @@
 - 📸 [Screenshots](#screenshots)
 
 ## Project Overview
-**Snake** to prosta gra, napisana w języku Python, wykorzystująca biblioteki Pygame. Nie jest to jednak typowa odmiana tego rodzaju rozgrywki. Jest to mój pierwszy projekt dotyczący stworzenia gry 2d. **The game is only available in Polish language version!**
+**Snake** is a simple game written in Python using the Pygame library. However, it's not a typical version of this type of gameplay. This is my first project involving the creation of a 2D game. **The game is only available in the Polish language version!**
 
 ## Features
-Siatka poruszania się węża nie jest sztywno ustalona, co daje graczowi możliwość poruszania się swobodnie po każdym pikselu planszy. Poza tym, to po prostu Snake! Zdobądź jak najwięcej punktów zbierająć jabłka, unikając zderzenia z granicami mapy i własnym ciałem.
+The snake's movement grid is not rigidly fixed, allowing the player to move freely across every pixel of the board. Other than that, it's just Snake! Earn as many points as possible by collecting apples while avoiding collisions with the map boundaries and your own body.
 
 ## Technologies
 
-- Python 3.10 używjący biblotek Pygame
+- Python 3.10 using the Pygame library
 
 ## Requirements
 Any system capable of running .exe files.
